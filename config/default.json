@@ -1,0 +1,3 @@
+{
+    "mongoURI" : "mongodb+srv://seiga:seiga@devconnector.dhxe6.mongodb.net/<dbname>?retryWrites=true&w=majority"
+}
