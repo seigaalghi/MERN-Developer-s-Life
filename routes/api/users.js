@@ -11,6 +11,11 @@ const config = require('config');
 // @DESC    TEST ROUTE
 // @ACCESS  PUBLIC
 
+router.get('/', async (req, res) => {
+  let user = await User.find().select('-password');
+  return res.status(200).json(user);
+});
+
 router.post(
   '/',
   [
