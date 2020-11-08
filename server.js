@@ -7,6 +7,10 @@ const PORT = process.env.PORT || 5000;
 
 connectDB();
 
+// INIT MIDDLEWARE
+
+app.use(express.json({ extended: false }));
+
 app.get('/', (req, res) => res.send('API is Running'));
 
 // DEFINE ROUTES
