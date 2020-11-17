@@ -1,4 +1,6 @@
 {
-    "mongoURI" : "mongodb+srv://seiga:seiga@devconnector.dhxe6.mongodb.net/<dbname>?retryWrites=true&w=majority",
-    "jwtSecret" : "mysecrettoken"
+    "mongoURI" : "mongodb+srv://seiga:seiga@devconnector.dhxe6.mongodb.net/devconnector?retryWrites=true&w=majority",
+    "jwtSecret" : "mysecrettoken",
+    "githubClientId" :"c2c83dc42b6c1edaec27",
+    "githubSecret" : " c163b1cd203e1dfd484096f1c7309dbd0303c53e"
 }
