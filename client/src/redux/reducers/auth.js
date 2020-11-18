@@ -1,4 +1,5 @@
 import { REGISTER_FAIL, REGISTER_SUCCESS, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from '../types';
+import axios from 'axios';
 
 const initialState = {
   token: localStorage.getItem('token'),
@@ -59,6 +60,7 @@ const authReducer = (state = initialState, action) => {
         user: null,
       };
     case LOGOUT:
+      delete axios.defaults.headers.common['x-auth-token'];
       localStorage.removeItem('token');
       return {
         ...state,

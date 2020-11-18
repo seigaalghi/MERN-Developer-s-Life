@@ -12,34 +12,30 @@ const { route } = require('./profile');
 // @DESC    Create a Oist
 // @ACCESS  Private
 
-router.post(
-  '/',
-  [auth, [check('text', 'Text is Required').not().isEmpty()]],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.error(errors);
-      res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-      const user = await User.findById(req.user.id).select('-passowrd');
-
-      const post = new Post({
-        text: req.body.text,
-        name: user.name,
-        avatar: user.avatar,
-        user: req.user.id,
-      });
-
-      await post.save();
-      res.status(200).json(post);
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).send('Server Error');
-    }
+router.post('/', [auth, [check('text', 'Text is Required').not().isEmpty()]], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.error(errors);
+    res.status(400).json({ errors: errors.array() });
   }
-);
+
+  try {
+    const user = await User.findById(req.user.id).select('-passowrd');
+
+    const post = new Post({
+      text: req.body.text,
+      name: user.name,
+      avatar: user.avatar,
+      user: req.user.id,
+    });
+
+    await post.save();
+    res.status(200).json(post);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 // @ROUTE   POST API/POSTS
 // @DESC    Get All Post
@@ -105,14 +101,11 @@ router.delete('/:post_id', auth, async (req, res) => {
 // @DESC    Like The Post
 // @ACCESS  Private
 
-router.post('/like/:post_id', auth, async (req, res) => {
+router.put('/like/:post_id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
 
-    if (
-      post.likes.filter((like) => like.user.toString() === req.user.id).length >
-      0
-    ) {
+    if (post.likes.filter((like) => like.user.toString() === req.user.id).length > 0) {
       return res.status(400).json({ msg: 'post already liked' });
     }
 
@@ -134,16 +127,11 @@ router.delete('/like/:post_id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
 
-    if (
-      post.likes.filter((like) => like.user.toString() === req.user.id)
-        .length === 0
-    ) {
+    if (post.likes.filter((like) => like.user.toString() === req.user.id).length === 0) {
       return res.status(400).json({ msg: 'post has not yet been liked' });
     }
 
-    const removeIndex = post.likes
-      .map((like) => like.user.toString())
-      .indexOf(req.user.id);
+    const removeIndex = post.likes.map((like) => like.user.toString()).indexOf(req.user.id);
 
     post.likes.splice(removeIndex, 1);
 
@@ -159,36 +147,32 @@ router.delete('/like/:post_id', auth, async (req, res) => {
 // @DESC    Comment on a post
 // @ACCESS  Private
 
-router.post(
-  '/comment/:post_id',
-  [auth, [check('text', 'Text is Required').not().isEmpty()]],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      console.error(errors);
-      res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-      const user = await User.findById(req.user.id).select('-passowrd');
-      const post = await Post.findById(req.params.post_id);
-      const comment = new Post({
-        text: req.body.text,
-        name: user.name,
-        avatar: user.avatar,
-        user: req.user.id,
-      });
-
-      post.comment.unshift(comment);
-
-      await post.save();
-      res.status(200).json(post);
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).send('Server Error');
-    }
+router.post('/comment/:post_id', [auth, [check('text', 'Text is Required').not().isEmpty()]], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.error(errors);
+    res.status(400).json({ errors: errors.array() });
   }
-);
+
+  try {
+    const user = await User.findById(req.user.id).select('-passowrd');
+    const post = await Post.findById(req.params.post_id);
+    const comment = new Post({
+      text: req.body.text,
+      name: user.name,
+      avatar: user.avatar,
+      user: req.user.id,
+    });
+
+    post.comment.unshift(comment);
+
+    await post.save();
+    res.status(200).json(post.comment);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 // @ROUTE   delete API/POSTS/comment/:post_id/:comment_id
 // @DESC    Delete a comment
@@ -197,23 +181,19 @@ router.post(
 router.delete('/comment/:post_id/:comment_id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
-    const comment = post.comment.find(
-      (comment) => comment.id == req.params.comment_id
-    );
+    const comment = post.comment.find((comment) => comment.id == req.params.comment_id);
     if (!comment) {
       return res.status(404).json({ msg: "comment doesn't exist" });
     }
     if (comment.user.toString() !== req.user.id) {
       return res.status(400).json({ msg: "You don't Owe This Comment" });
     }
-    const removeIndex = post.comment
-      .map((cmn) => cmn.id.toString())
-      .indexOf(req.params.comment_id);
+    const removeIndex = post.comment.map((cmn) => cmn.id.toString()).indexOf(req.params.comment_id);
 
     post.comment.splice(removeIndex, 1);
 
     await post.save();
-    res.json(post);
+    res.json(post.comment);
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Server Error');

@@ -17,6 +17,10 @@ import CreateProfile from './components/CreateProfile';
 import EditProfile from './components/EditProfile';
 import AddExperience from './components/AddExperience';
 import AddEducation from './components/AddEducation';
+import Profiles from './components/Profiles';
+import Profile from './components/Profile';
+import Posts from './components/posts/Posts';
+import Post from './components/posts/Post';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -39,10 +43,14 @@ function App() {
               <Route path='/register' exact component={Register} />
               <Route path='/login' exact component={Login} />
               <PrivateRoute path='/dashboard' exact component={Dashboard} />
-              <Route path='/create-profile' exact component={CreateProfile} />
-              <Route path='/edit-profile' exact component={EditProfile} />
-              <Route path='/add-experience' exact component={AddExperience} />
-              <Route path='/add-education' exact component={AddEducation} />
+              <PrivateRoute path='/create-profile' exact component={CreateProfile} />
+              <PrivateRoute path='/edit-profile' exact component={EditProfile} />
+              <PrivateRoute path='/add-experience' exact component={AddExperience} />
+              <PrivateRoute path='/add-education' exact component={AddEducation} />
+              <Route path='/profile' exact component={Profiles} />
+              <Route path='/profile/:userId' exact component={Profile} />
+              <PrivateRoute path='/posts' exact component={Posts} />
+              <PrivateRoute path='/post/:postId' exact component={Post} />
             </Switch>
           </section>
         </Fragment>

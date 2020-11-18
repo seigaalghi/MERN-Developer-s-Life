@@ -14,7 +14,7 @@ const Dashboard = ({ getCurrentProfile, deleteAccount, cleanProfile, auth: { use
     return () => {
       cleanProfile();
     };
-  }, []);
+  }, [getCurrentProfile, cleanProfile]);
 
   return loading && profile === null ? (
     <ReactLoading type={'spinningBubbles'} color={'grey'} style={{ margin: '50px auto', width: '50px' }} />

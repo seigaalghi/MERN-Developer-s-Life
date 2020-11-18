@@ -8,6 +8,7 @@ const { check, validationResult } = require('express-validator');
 const request = require('request');
 const config = require('config');
 const { restart } = require('nodemon');
+const fetch = require('node-fetch');
 
 // @ROUTE   GET API/PROFILE/ME
 // @DESC    Get Current Users Profile
@@ -110,12 +111,12 @@ router.get('/user/:user_id', async (req, res) => {
     }).populate('user', ['name', 'avatar']);
 
     if (!profile) {
-      res.status(400).json({ msg: 'Profile Not Found' });
+      return res.status(400).json({ msg: 'Profile Not Found' });
     }
     res.status(200).json(profile);
   } catch (error) {
     if (error.kind == 'ObjectId') {
-      res.status(400).json({ msg: 'Profile Not Found' });
+      return res.status(400).json({ msg: 'Profile Not Found' });
     }
     console.error(error.message);
     res.status(500).json('Internal Server Error ');
@@ -262,9 +263,7 @@ router.delete('/education/:edu_id', auth, async (req, res) => {
   }
 });
 
-// @ROUTE   Delete API/PROFILE/github/:username
-// @DESC    get user repos from github
-// @ACCESS  Public
+// GITHUB
 
 router.get('/github/:username', async (req, res) => {
   try {

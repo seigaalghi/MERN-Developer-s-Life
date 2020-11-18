@@ -25,7 +25,7 @@ const EditProfile = ({ cleanProfile, createProfile, history, getCurrentProfile, 
     return () => {
       cleanProfile();
     };
-  }, []);
+  }, [getCurrentProfile, cleanProfile]);
 
   useEffect(() => {
     if (!loading && profile)
