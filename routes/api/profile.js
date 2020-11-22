@@ -64,7 +64,7 @@ router.post('/', [auth, [check('status', 'Status is Required').not().isEmpty(), 
   if (twitter) profileFields.social.twitter = twitter;
   if (facebook) profileFields.social.facebook = facebook;
   if (linkedin) profileFields.social.linkedin = linkedin;
-  if (instagram) profileFields.social.instagram = youtube;
+  if (instagram) profileFields.social.instagram = instagram;
 
   try {
     let profile = await Profile.findOne({ user: req.user.id });
