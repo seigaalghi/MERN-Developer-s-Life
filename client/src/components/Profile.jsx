@@ -46,7 +46,7 @@ const Profile = ({ profile, loading, repos, getGithubRepos, cleanProfile, getPro
               </p>
               <p>{profile.location}</p>
               <div className='icons my-1'>
-                <a href={`${profile.social ? (profile.social.facebook ? profile.social.facebook : '') : ''}`} target='_blank' rel='noopener noreferrer'>
+                <a href={`${profile.website ? (profile.website ? profile.website : '') : ''}`} target='_blank' rel='noopener noreferrer'>
                   <i className='fas fa-globe fa-2x'></i>
                 </a>
                 <a href={profile.social ? (profile.social.twitter ? profile.social.twitter : '') : ''} target='_blank' rel='noopener noreferrer'>
